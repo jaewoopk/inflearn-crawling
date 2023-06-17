@@ -9,9 +9,22 @@ const getHTML = async(keyword) => {
     }
 };
 
-const parsing = async (keyword) => {
+const parsing = async(keyword) => {
     const html = await getHTML(keyword);
-    console.log(html);
+    const $ = cheerio.load(html.data);
+    const $courseList = $(".course_card_item");
+
+    let courses = [];
+    $courseList.each((idx, node) => {
+        courses.push({
+            title: $(node).find(".course_title:eq(0)").text() ,
+            instructor: $(node).find(".instructor").text() ,
+            price: $(node).find(".price").text() ,
+            rating: $(node).find(".star_solid").css("width") ,
+            img: $(node).find(".card-image > figure > img").attr("src") 
+        })
+        console.log(courses);
+    });
 };
 
-parsing("자바스크립트");
+parsing("파이썬");
